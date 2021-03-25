@@ -2,10 +2,12 @@
 '''
     basic.py:基本的图元
 '''
-def setPixel(canvas,point,aisle=1):
-    pixel = canvas[:,:,:aisle]
-    shape = pixel.shape
-    pixel[point[1]][shape[1] - point[0]] = 255
+def setPixel(canvas,point,color):
+    for i in range(1,4):
+        pixel = canvas[:,:,:i]
+        shape = pixel.shape
+        pixel[shape[0] - point[1]][point[0]] = color[i - 1]
+
 
 class primitive:
     def rasterization(self,canvas):
@@ -13,17 +15,18 @@ class primitive:
 
 class point(primitive):
     #点
-    def __init(self,x,y,z=0,size=1):
+    def __init__(self,x,y,color=(255,255,255),size=1):
         self.x = x
         self.y = y
         self.z = 0
         self.size = size
+        self.color = color
     def rasterization(self,canvas):
-        pass
+        setPixel(canvas,(self.x,self.y),self.color)
 
 class line(primitive):
     #直线
-    def __init__(self,x0,y0,xend,yend,size=1):
+    def __init__(self,x0,y0,xend,yend,color=(255,255,255),size=1):
         self.x0 = x0
         self.y0 = y0
         self.xend = xend
@@ -31,7 +34,7 @@ class line(primitive):
 
         self.size = size
         self.points = []
-
+        self.color = color
         #计算点
         dx = abs(xend - x0)
         dy = abs(yend - y0)
@@ -93,7 +96,7 @@ class line(primitive):
 
     def rasterization(self,canvas):
         for point in self.points:
-            setPixel(canvas,point)
+            setPixel(canvas,point,self.color)
 
 class lines(line):
     #多条直线
