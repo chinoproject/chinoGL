@@ -16,7 +16,7 @@ class draw:
         for i in self.draw_list:
             i.rasterization(self.canvas)
     def show(self):
-        image = Image.fromarray(self.canvas).convert("RGB")
+        image = Image.fromarray(self.canvas.copy()).convert("RGB")
         image.show()
 
 if __name__ == '__main__':
