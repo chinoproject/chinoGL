@@ -2,6 +2,7 @@
 '''
     basic.py:基本的图元
 '''
+
 def setPixel(canvas,point,color):
     for i in range(1,4):
         pixel = canvas[:,:,:i]
@@ -13,8 +14,11 @@ def setPixel(canvas,point,color):
 
 
 class primitive:
+    def __init__(self):
+        self.points = []
     def rasterization(self,canvas):
-        pass
+        for point in self.points:
+            setPixel(canvas,point,self.color)
 
 class point(primitive):
     #点
@@ -95,10 +99,6 @@ class line(primitive):
                 y += 1
                 p += twodymiusdx
             self.points.append((x,y))
-
-    def rasterization(self,canvas):
-        for point in self.points:
-            setPixel(canvas,point,self.color)
 
 class lines(line):
     #多条直线
@@ -220,10 +220,6 @@ class cricle(primitive):
         self.points.append((x0 + y,y0 - x))
         self.points.append((x0 - y,y0 - x))
 
-    def rasterization(self,canvas):
-        for point in self.points:
-            setPixel(canvas,point,self.color)
-
 class ellipse(primitive):
     #椭圆
     def __init__(self,rx,ry,x,y,size=1):
@@ -232,5 +228,3 @@ class ellipse(primitive):
         self.x = x
         self.y = y
         self.size = size
-    def rasterization(self,canvas):
-        pass
