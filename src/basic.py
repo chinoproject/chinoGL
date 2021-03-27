@@ -7,10 +7,12 @@ def setPixel(canvas,point,color):
     for i in range(1,4):
         pixel = canvas[:,:,:i]
         shape = pixel.shape
-        if point == (0,0):
-            pixel[shape[0] - 1][0] = color[i - 1]
+        if shape[0] - point[1] == shape[0]:
+            x = shape[0] - 1
         else:
-            pixel[shape[0] - point[1]][point[0]] = color[i - 1]
+            x = shape[0] - point[1]
+
+        pixel[x][point[0]] = color[i - 1]
 
 
 class primitive:
@@ -164,9 +166,54 @@ class cricle(primitive):
 
 class ellipse(primitive):
     #椭圆
-    def __init__(self,rx,ry,x,y,size=1):
-        self.rx = rx
-        self.ry = ry
+    def __init__(self,centerx,centery,x,y,color=(255,255,255),size=1):
+        self.centerx = centerx
+        self.centery = centery
         self.x = x
         self.y = y
         self.size = size
+        self.points = []
+        self.color = color
+        self.__calc_point(x,y,centerx,centery)
+
+    def __calc_point(self,rx,ry,centerx,centery):
+        rx2 = rx**2
+        ry2 = ry**2
+        tworx2 = 2 * rx2
+        twory2 = 2 * ry2
+        x = 0
+        y = ry
+        px = 0
+        py = tworx2 * y
+
+        p = round(ry2 - rx2*ry + 0.25*rx2)
+        while px < py:
+            x += 1
+            px += twory2
+            if p < 0:
+                p += ry2 + px
+            else:
+                y -= 1
+                py -= tworx2
+                p += ry2 + px - py
+            self.__plotPoint(centerx,centery,x,y)
+        p = round(ry2*(x+0.5)**2 + rx2*(y-1)**2 - rx2*ry2)
+        while y > 0:
+            y -= 1
+            py -= tworx2
+            if p > 0:
+                p += rx2 - py
+            else:
+                x += 1
+                px += twory2
+                p += rx2 - py + px
+            self.__plotPoint(centerx,centery,x,y)
+    
+        self.points.append((centerx,centery + ry))
+        self.points.append((centerx,centery - ry))
+
+    def __plotPoint(self,centerx,centery,x,y):
+        self.points.append((centerx + x,centery + y))
+        self.points.append((centerx - x,centery + y))
+        self.points.append((centerx + x,centery - y))
+        self.points.append((centerx - x,centery - y))
