@@ -182,13 +182,47 @@ class lines(line):
 
 class cricle(primitive):
     #圆
-    def __init__(self,x,y,r,size=1):
+    def __init__(self,x,y,r,color=(255,255,255),size=1):
         self.x = x
         self.y = y
         self.r = r
         self.size = size
+        self.color = color
+        self.points = []
+        self.__calc_point(self.r,self.x,self.y)
+    def __calc_point(self,r,x0,y0):
+        x = 0
+        y = r
+        p = 5/4 - r
+        while x <= y:
+            x += 1
+            if p < 0:
+                p += 2*x + 1
+            else:
+                p += 2 * (x - (y + 0.1)) + 1
+                y -= 1
+            #print(y0,y)
+            self.__cricPoints(x0,y0,x,y)
+        
+        #处理在XY轴上的点
+        self.points.append((x0,y0 + r))
+        self.points.append((x0,y0 - r))
+        self.points.append((x0 + r,y0))
+        self.points.append((x0 - r,y0))
+
+    def __cricPoints(self,x0,y0,x,y):
+        self.points.append((x0 + x,y0 + y))
+        self.points.append((x0 - x,y0 + y))
+        self.points.append((x0 + x,y0 - y))
+        self.points.append((x0 - x,y0 - y))
+        self.points.append((x0 + y,y0 + x))
+        self.points.append((x0 - y,y0 + x))
+        self.points.append((x0 + y,y0 - x))
+        self.points.append((x0 - y,y0 - x))
+
     def rasterization(self,canvas):
-        pass
+        for point in self.points:
+            setPixel(canvas,point,self.color)
 
 class ellipse(primitive):
     #椭圆
