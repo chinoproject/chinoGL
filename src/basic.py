@@ -21,6 +21,11 @@ class primitive:
     def rasterization(self,canvas):
         for point in self.points:
             setPixel(canvas,point,self.color)
+    def move(self,tx,ty):
+        for i in range(len(self.points)):
+            print(i)
+            self.points[i][0] += tx
+            self.points[i][1] += ty
 
 class point(primitive):
     #点
@@ -44,6 +49,7 @@ class line(primitive):
         self.size = size
         self.points = []
         self.color = color
+        self.calc_point(x0,y0,xend,yend)
         #计算点
     def calc_point(self,x0,y0,xend,yend):
         dx = abs(xend - x0)
@@ -77,19 +83,19 @@ class line(primitive):
         elif k == 1.0:
             x,y = x0,y0
             while x <= xend:
-                self.points.append((x,x))
+                self.points.append([x,x])
                 x += 1
             return
         elif k == 0:
             x,y = x0,y0
             while x < xend:
-                self.points.append((x,y))
+                self.points.append([x,y])
                 x += 1
             return
         elif k == -1:
             y,x = x0,y0
             while y < yend:
-                self.points.append((x,y))
+                self.points.append([x,y])
                 y += 1
             return
         self.points.append((x,y))
@@ -101,7 +107,7 @@ class line(primitive):
             else:
                 y += 1
                 p += twodymiusdx
-            self.points.append((x,y))
+            self.points.append([x,y])
 
 class lines(line):
     #多条直线
