@@ -2,7 +2,7 @@
 '''
     basic.py:基本的图元
 '''
-
+from math import sin,cos
 def setPixel(canvas,point,color):
     for i in range(1,4):
         pixel = canvas[:,:,:i]
@@ -23,9 +23,13 @@ class primitive:
             setPixel(canvas,point,self.color)
     def move(self,tx,ty):
         for i in range(len(self.points)):
-            print(i)
             self.points[i][0] += tx
             self.points[i][1] += ty
+    def rotate(self,tx,ty,theta):
+        points = []
+        for i in range(len(self.points)):
+            self.points[i][0] = round(tx + (self.points[i][0] - tx)*cos(theta) - (self.points[i][1] - ty)*sin(theta))
+            self.points[i][1] = round(ty + (self.points[i][0] - tx)*sin(theta) + (self.points[i][1] - ty)*cos(theta))
 
 class point(primitive):
     #点
