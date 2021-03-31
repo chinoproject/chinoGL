@@ -30,7 +30,11 @@ class primitive:
         for i in range(len(self.points)):
             self.points[i][0] = round(tx + (self.points[i][0] - tx)*cos(theta) - (self.points[i][1] - ty)*sin(theta))
             self.points[i][1] = round(ty + (self.points[i][0] - tx)*sin(theta) + (self.points[i][1] - ty)*cos(theta))
-
+    def scale(self,sx,sy,xf,yf):
+        for i in range(len(self.points)):
+            self.points[i][0] = round(self.points[i][0] * sx + xf*(1-sx))
+            self.points[i][0] = round(self.points[i][1] * sy + yf*(1-sy))
+        print(self.points)
 class point(primitive):
     #点
     def __init__(self,x,y,color=(255,255,255),size=1):
