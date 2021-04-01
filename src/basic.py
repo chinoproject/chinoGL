@@ -43,8 +43,9 @@ class point(primitive):
         self.z = 0
         self.size = size
         self.color = color
+        self.points = [[x,y]]
     def rasterization(self,canvas):
-        setPixel(canvas,(self.x,self.y),self.color)
+        setPixel(canvas,(self.points[0][0],self.points[0][1]),self.color)
 
 class line(primitive):
     #直线
